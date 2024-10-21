@@ -165,6 +165,7 @@ class Qif(BaseModel):
                 if (
                     not line.strip()
                     or line.strip().startswith("!Clear:")
+                    or line.strip().startswith("!Option:")
                     or line[0] == "#"
                 ):
                     continue

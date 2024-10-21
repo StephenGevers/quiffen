@@ -254,7 +254,7 @@ class Account(BaseModel):
                 kwargs["account_type"] = field_info
             elif line_code == "L":
                 kwargs["credit_limit"] = field_info.replace(",", "")
-            elif line_code in {"$", "£"}:
+            elif line_code in {"$", "£", "B"}:
                 kwargs["balance"] = field_info.replace(",", "")
             elif line_code == "/":
                 balance_date = utils.parse_date(field_info, day_first)

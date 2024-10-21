@@ -348,6 +348,8 @@ class Transaction(BaseModel):
         classes: Dict[str, Class] = {}
         splits: List[Split] = []
         current_split: Optional[Split] = None
+        saved_split_memo = None
+
 
         for field in lst:
             line_code, field_info = utils.parse_line_code_and_field_info(field)
@@ -373,6 +375,9 @@ class Transaction(BaseModel):
                 new_split = Split(category=split_category)
                 splits.append(new_split)
                 current_split = new_split
+                if saved_split_memo is not None:
+                    current_split.memo = saved_split_memo
+                    saved_split_memo = None
             elif line_code == "D":
                 transaction_date = utils.parse_date(field_info, day_first)
                 if not splits:
@@ -381,9 +386,10 @@ class Transaction(BaseModel):
                     current_split.date = transaction_date
             elif line_code == "E":
                 if current_split is None:
-                    logger.warning(
-                        f"No split yet given for memo '{field_info}', skipping"
-                    )
+                    saved_split_memo = field_info
+                    #logger.warning(
+                     #   f"No split yet given for memo '{field_info}', skipping"
+                    #)
                 else:
                     current_split.memo = field_info
             elif line_code in {"$", "£"}:
