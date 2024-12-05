@@ -154,6 +154,8 @@ class Qif(BaseModel):
         for section in sections:
             if not section:
                 continue
+            if section[0] == '\n':
+                section = section[1:]
 
             section_lines = section.split(separator)
             if not section_lines:
@@ -297,7 +299,7 @@ class Qif(BaseModel):
                     else:
                         classes[class_name] = new_class
 
-            line_number += len(section.split("\n"))
+            line_number += len(section_lines)
 
         return cls(
             accounts=accounts,

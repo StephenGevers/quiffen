@@ -173,6 +173,8 @@ class Investment(BaseModel):
             elif line_code == "P":
                 kwargs["first_line"] = field_info
             elif line_code == "L":
+                if field_info.startswith ("["):
+                    field_info = field_info[1:-1]
                 kwargs["to_account"] = field_info
             elif line_code == "$":
                 kwargs["transfer_amount"] = field_info.replace(",", "")
